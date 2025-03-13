@@ -22,6 +22,7 @@ An Angular-based inventory management system fulfilling Datenlotsen's developer 
 
 ## Architecture
 
+```
 src/
 ├── app/
 │ ├── core/ # Reusable components & services
@@ -35,7 +36,7 @@ src/
 │ │ └── services/
 │ └── shared/ # Shared UI components
 └── assets/ # Translation files & images
-
+```
 
 ## Key Decisions
 1. **State Management**: Used BehaviorSubject for centralized state handling
