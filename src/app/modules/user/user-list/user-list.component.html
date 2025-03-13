@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="card-toolbar">
+    <a class="btn btn-success float-end" routerLink="/user/user-create">
+      <i class="ki-duotone ki-plus fs-2"></i>
+      <span translate="Users.Create"></span> </a>
+  </div>
+</div>
+<app-shared-datatable [cols]="Cols" [rowsPageNumbers]="10" [pagination]="true" [scrollable]="false" [data]="Data!"
+  [chooseColomns]="true" [FirstBtn]="true" [contentFirstBtn]="'edit'" [classFirstBtn]="'light-warning'"
+  (firstButtonEvent)="editUser($event.id)" [SecondBtn]="true" [contentSecondBtn]="'delete'"
+  [classSecondBtn]="'light-danger'" (secondButtonEvent)="deleteUser($event.id)"></app-shared-datatable>

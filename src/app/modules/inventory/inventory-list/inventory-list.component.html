@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="card-toolbar">
+    <a class="btn btn-success float-end" routerLink="/inventory/inventory-create">
+      <i class="ki-duotone ki-plus fs-2"></i>
+      <span translate="INVENTORY.Create"></span>
+    </a>
+  </div>
+</div>
+<br>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <input type="text" class="form-control" [(ngModel)]="nameFilter" placeholder="Filter by name..."
+      (input)="applyFilters()">
+  </div>
+  <div class="col-md-6">
+    <select class="form-control" [(ngModel)]="stockStatusFilter" (change)="applyFilters()">
+      <option value="">All</option>
+      <option value="Low Stock">Low Stock</option>
+      <option value="In Stock">In Stock</option>
+    </select>
+  </div>
+</div>
+<app-shared-datatable [cols]="Cols" [rowsPageNumbers]="10" [pagination]="true" [scrollable]="false"
+  [data]="filteredData!" [chooseColomns]="true" [FirstBtn]="true" [contentFirstBtn]="'edit'"
+  [classFirstBtn]="'light-warning'" (firstButtonEvent)="editInventory($event.id)" [SecondBtn]="true"
+  [contentSecondBtn]="'delete'" [classSecondBtn]="'light-danger'"
+  (secondButtonEvent)="deleteInventory($event.id)"></app-shared-datatable>

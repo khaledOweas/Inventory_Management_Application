@@ -1,0 +1,15 @@
+<div>
+  @for (controlName of objectKeys(parentForm.controls); track $index) {
+  @if(parentForm.get(controlName)?.invalid && parentForm.get(controlName)?.touched){
+  @for (error of objectKeys(parentForm.get(controlName)?.errors); track $index) {
+  <div class="alert alert-danger">
+    <div class="alert-text font-weight-bold">
+      <label [translate]="concatString(translateKey + '.' ,  controlName)"></label> <span> : </span><span
+        [translate]="concatString('Validation.',error)"></span>
+    </div>
+  </div>
+  }
+  <br>
+  }
+  }
+</div>

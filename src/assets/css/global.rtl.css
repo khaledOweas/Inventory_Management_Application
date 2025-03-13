@@ -1,0 +1,41 @@
+p-dropdown ol,
+ul {
+  padding-right: 0rem;
+  padding-left: 0rem;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+  text-align: right !important;
+  font-family: "tajawal-black" !important;
+  background-color: #0D0E12 !important;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+  text-align: right !important;
+  display: table-cell !important;
+  padding: 3px !important;
+  border-bottom: 1px black solid;
+}
+
+.p-datatable .p-paginator-bottom,
+p-splitbutton {
+  direction: ltr;
+}
+
+.p-paginator {
+  direction: ltr;
+}
+
+
+.clinics-radius {
+  border-radius: 0 14px 0 0;
+}
+
+p-calendar {
+  direction: ltr;
+  text-align: center;
+}
+
+p-calendar input {
+  text-align: end;
+}

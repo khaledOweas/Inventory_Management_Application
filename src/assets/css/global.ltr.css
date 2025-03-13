@@ -1,0 +1,28 @@
+p-dropdown ol,
+ul {
+  padding-right: 0rem !important;
+  padding-left: 0rem !important;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+  text-align: left !important;
+  font-family: "tajawal-black" !important;
+  background-color: #0D0E12 !important;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+  text-align: left !important;
+  display: table-cell !important;
+  padding: 3px !important;
+  border-bottom: 0.5px rgb(38, 38, 38) solid;
+}
+
+.p-datatable .p-paginator-bottom,
+p-splitbutton {
+  direction: ltr;
+}
+
+
+.clinics-radius {
+  border-radius: 14px 0 0 0;
+}

@@ -1,0 +1,142 @@
+<div class="row mt-5">
+  <p-table #dt id="dtable" [columns]="selectedColumns" [value]="data" [paginator]="pagination" [rows]="rowsPageNumbers"
+    [rowHover]="true" [(first)]="first" [scrollable]="scrollable" [scrollHeight]=scrollHeight
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50,100,150,200,250,300]" [metaKeySelection]="true"
+    [(selection)]="selectedRows" [globalFilterFields]="filterFiledsByColumn" (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnSelect($event)" (onHeaderCheckboxToggle)="onHeaderCheckBoxToogle($event)"
+    (onPage)="pageChange($event)" tableStyleClass="table"
+    [currentPageReportTemplate]="lang == 'ar' ? 'من {first} الي  {last}  من إجمالي {totalRecords}   ' : ' From  {first}  To  {last}  Total  {totalRecords}   '"
+    selectionMode="multiple" [reorderableColumns]="true" (onRowReorder)="onRowReorder($event)">
+    <ng-template pTemplate="caption">
+      <div class="flex" style="justify-content: space-between;display:
+                flex;">
+        <p-multiSelect *ngIf="chooseColomns" [options]="cols" [(ngModel)]="selectedColumns" [filter]="false"
+          [style]="{'min-width': '200px'}" optionLabel="header"
+          [placeholder]="lang == 'ar' ? 'إختر الأعمدة' :'Choose Columns'"
+          [selectedItemsLabel]="lang == 'ar' ? 'عدد {0}  ' : 'Count {0}  '"></p-multiSelect>
+        <p-splitButton *ngIf="multipleSelectChechBox &&
+                    selectedRows.length> 0" [model]="menuForSelectedItems" (onClick)="SelectedAction1()"
+          label="{{mainButtonForItems}} ({{selectedRows.length}})" icon="pi pi-check"></p-splitButton>
+        <span style="display: flex;flex-direction: row-reverse;">
+          <div class="d-flex align-items-center position-relative my-1
+                    Mob-SearchDataTable">
+            <!-- begin::Svg Icon | path: icons/duotune/general/gen021.svg -->
+            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                  transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
+                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556
+                                6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19
+                                15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5
+                                7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667
+                                17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
+              </svg>
+            </span>
+            <!-- end::Svg Icon -->
+            <input (input)="applyFilterGlobal($event, 'contains' , dt)" pInputText type="text"
+              class="form-control  w-400px ps-14 " style="height: 40px;" placeholder="بحـث.."
+              placeholder="{{searchText}}">
+          </div>
+          <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="downloadPDF()" class="bg-success mr-2"
+            pTooltip="تصدير ملف PDF" tooltipPosition="bottom"
+            style="margin-right: 21px;margin-left: 21px;border-radius: 8px;"></button>
+        </span>
+        <!-- <span
+					class="p-input-icon-left ml-auto" *ngIf="filtration">
+                <i class="pi pi-search"></i>
+
+            </span> -->
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-rowData let-columns let-rowIndex="rowIndex">
+      <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+        <th *ngIf="rowOrder" style="width:3rem"></th>
+        <th *ngIf="multipleSelectChechBox" style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field" pReorderableColumn>
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+        <th *ngIf="FirstBtn || SecondBtn || ThirdBtn "> </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
+      <tr [pReorderableRow]="index">
+        <td *ngIf="rowOrder">
+          <span class="pi pi-bars" pReorderableRowHandle></span>
+        </td>
+        <td *ngIf="multipleSelectChechBox">
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          <span class="circular-image" *ngIf="col.type == 'image'">
+            <p-image [src]="BindImage(rowData,col)" (onImageError)="onImageError($event)" alt="Image" width="40"
+              height="40" [previewImageSrc]="BindImage(rowData,col)" [preview]="true" />
+          </span>
+          <span *ngIf="col.type == 'text'">
+            {{BindData(rowData,col)}}
+          </span>
+
+          <span *ngIf="col.type == 'textWhatsappIndecator'" style="display: flex;justify-content: space-between;">
+            <span>
+              {{BindData(rowData,col)}}
+            </span>
+            <span>
+              <i class="cardIcon pi pi-whatsapp" style="bottom: 120px;"
+                [ngStyle]="{'color': GetNumberValue(rowData,col.field2) != 0 && GetNumberValue(rowData,col.field2) != undefined ? 'blue' :'transparent' }"></i>
+            </span>
+            <!-- whatsAppUserId -->
+          </span>
+          <span *ngIf="col.type == 'date'">
+            {{BindDate(rowData,col)}}
+          </span>
+          <span *ngIf="col.type == 'datetime'">
+            {{BindDateTime(rowData,col)}}
+          </span>
+          <span *ngIf="col.type == 'url'">
+            <span (click)="UrlAction1(rowData)" class="datatable-url">
+              {{BindData(rowData,col)}}
+            </span>
+          </span>
+          <span *ngIf="col.type == 'feedback'">
+            <img [src]="'/assets/media/img/'+ GetNumberValue(rowData,col.field)!  + '-emo-1.png'" width="30px">
+          </span>
+          <span *ngIf="col.type == 'bool'">
+            <span *ngIf="getBooleanValue(rowData,
+                            col.field)" class>
+              <app-keenicon name="check-square" class="fs-2x" type="solid"></app-keenicon>
+            </span>
+            <span *ngIf="!getBooleanValue(rowData,
+                            col.field)" class>
+              <app-keenicon name="abstract-11" class="fs-2x" type="solid"></app-keenicon>
+            </span>
+          </span>
+        </td>
+        <td *ngIf="FirstBtn || SecondBtn || ThirdBtn ">
+          <a *ngIf="FirstBtn" [innerHTML]="htmlContent(contentFirstBtn)" (click)="rowFirstClick(rowData)"
+            class="btn btn-sm btn-{{classFirstBtn}}"></a>
+          <a *ngIf="SecondBtn" [innerHTML]="htmlContent(contentSecondBtn)" (click)="rowSecondClick(rowData)"
+            style="margin: 0px 7px;" class="btn btn-sm btn-{{classSecondBtn}}"></a>
+          <a *ngIf="ThirdBtn" [innerHTML]="htmlContent(contentThirdBtn)" (click)="rowThirdClick(rowData)"
+            class="btn btn-sm btn-{{classThirdBtn}}"></a>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template *ngIf="showPlustCloudeButtons" pTemplate="paginatorleft">
+      <p-button (click)="plusButtonClick()" type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+    </ng-template>
+    <ng-template *ngIf="showPlustCloudeButtons" pTemplate="paginatorright">
+      <p-button (click)="cloudButtonClick()" type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [attr.colspan]="selectedColumns.length - 1" style="text-align: center
+                    !important;">
+          {{NoRecordsFound}}
+        </td>
+        <td></td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
